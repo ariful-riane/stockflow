@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -29,4 +30,41 @@ class Product(models.Model):
     @property
     def is_low_stock(self):
         return self.quantity <= self.minimum_stock
+    
+class StockMovement(models.Model):
+    class MovementType(models.TextChoices):
+        STOCK_IN = "IN", "Stock In"
+        STOCK_OUT = "OUT", "Stock Out"
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.PROTECT,
+        related_name="movements",
+    )
+
+    movement_type = models.CharField(
+        max_length=3,
+        choices=MovementType.choices,
+    )
+
+    quantity = models.PositiveIntegerField()
+
+    performed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="stock_movements",
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return (
+            f"{self.get_movement_type_display()} - "
+            f"{self.product.name} ({self.quantity})"
+        )
 # Create your models here.
