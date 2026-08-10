@@ -6,7 +6,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-    
 class Product(models.Model):
     name = models.CharField(max_length=150)
     sku = models.CharField(max_length=50, unique=True)
@@ -30,7 +29,6 @@ class Product(models.Model):
     @property
     def is_low_stock(self):
         return self.quantity <= self.minimum_stock
-    
 class StockMovement(models.Model):
     class MovementType(models.TextChoices):
         STOCK_IN = "IN", "Stock In"
@@ -67,4 +65,3 @@ class StockMovement(models.Model):
             f"{self.get_movement_type_display()} - "
             f"{self.product.name} ({self.quantity})"
         )
-# Create your models here.
