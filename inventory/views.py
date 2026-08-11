@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import ProtectedError
 
 from .forms import ProductForm
 from .models import Product
@@ -37,4 +38,23 @@ def product_edit(request, pk):
                         "product": product,
                         "is_edit": True,
                     }
+                )
+
+def product_delete(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == "POST":
+        try:
+            product.delete()
+            return redirect("inventory:product_list")
+        except ProtectedError:
+            return render(request, "inventory/product_confirm_delete.html",
+                          {
+                              "product": product,
+                              "cannot_delete": True,
+                          }
+                        )
+
+    return render(request, "inventory/product_confirm_delete.html",
+                  {"product": product},
                 )

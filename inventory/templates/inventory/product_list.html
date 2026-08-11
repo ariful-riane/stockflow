@@ -29,6 +29,10 @@
                 <td>
                     <a href="{% url 'inventory:product_edit' pk=product.pk %}">Edit</a>
                 </td>
+
+                <td>
+                    <a href="{% url 'inventory:product_delete' pk=product.pk %}">Delete</a>
+                </td>
             </tr>
             {% empty %}
             <tr>
