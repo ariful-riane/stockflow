@@ -1,0 +1,35 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Products | StockFlow{% endblock %}
+
+{% block content %}
+    <h2>Product List</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.sku }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.price }}</td>
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No products available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</table>
+{% endblock %}
