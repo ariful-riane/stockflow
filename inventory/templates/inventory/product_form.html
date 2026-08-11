@@ -1,9 +1,19 @@
 {% extends "inventory/base.html" %}
 
-{%block title%}Add Product | StockFlow{%endblock%}
+{%block title%}
+    {% if is_edit %}
+        Edit Product | StockFlow
+    {% else %}
+        Add Product | StockFlow
+    {% endif %}
+{%endblock%}
 
 {% block content %}
-    <h2>Add Product</h2>
+    {% if is_edit %}
+        <h2>Edit Product</h2>
+    {% else %}
+        <h2>Add Product</h2>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

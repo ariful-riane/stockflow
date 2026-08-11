@@ -15,6 +15,7 @@
                 <th>Category</th>
                 <th>Quantity</th>
                 <th>Price</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -25,13 +26,15 @@
                 <td>{{ product.category }}</td>
                 <td>{{ product.quantity }}</td>
                 <td>{{ product.price }}</td>
-                
+                <td>
+                    <a href="{% url 'inventory:product_edit' pk=product.pk %}">Edit</a>
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5">No products available.</td>
+                <td colspan="6">No products available.</td>
             </tr>
             {% endfor %}
         </tbody>
-</table>
+    </table>
 {% endblock %}
