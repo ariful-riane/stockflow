@@ -2,21 +2,37 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import ProtectedError, Q
 
 from .forms import ProductForm
-from .models import Product
+from .models import Product, Category
 
 def product_list(request):
-    products = Product.objects.all()
+    products = Product.objects.select_related("category").all().order_by("name")
+    categories = Category.objects.all().order_by("name")
 
     search = request.GET.get("search", "").strip()
+    category_id = request.GET.get("category", "").strip()
+
+    selected_category_id = None
 
     if search:
         products = products.filter(
             Q(name__icontains=search) | Q(sku__icontains=search)
         )
+
+    if category_id:
+        try:
+            selected_category_id = int(category_id)
+     
+        except ValueError:
+            selected_category_id = None
+        else:
+            products = products.filter(category_id=selected_category_id)
+
     return render(request, "inventory/product_list.html", 
                   {
                       "products": products,
-                      "search": search
+                      "search": search,
+                      "categories": categories,
+                      "selected_category_id": selected_category_id
                    }
                   )
 

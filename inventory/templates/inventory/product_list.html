@@ -8,9 +8,18 @@
     <form method="get" action="{% url 'inventory:product_list' %}">
         <input type="text" name="search" placeholder="Search by name or SKU" value="{{ search }}">
 
-        <button type="submit">Search</button>
+        <select name="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == selected_category_id %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
 
-        {% if search %}
+        <button type="submit">Filter</button>
+
+        {% if search or selected_category_id %}
             <a href="{% url 'inventory:product_list' %}">Clear</a>
         {% endif %}
 
@@ -45,7 +54,13 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="6">No products available.</td>
+                <td colspan="6">
+                    {% if search or selected_category_id %}
+                        No products found.
+                    {% else %}
+                        No products available.
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
