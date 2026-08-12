@@ -4,6 +4,9 @@ from django.db.models import ProtectedError, Q
 from .forms import ProductForm
 from .models import Product, Category
 
+def index(request):
+    return render(request, "inventory/index.html")
+
 def product_list(request):
     products = Product.objects.select_related("category").all().order_by("name")
     categories = Category.objects.all().order_by("name")

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StockFlow{% endblock %}</title>
+</head>
+
+<body>
+    <header class="public-header">
+        <h1>
+            <a href="{% url 'inventory:index' %}">StockFlow</a>
+        </h1>
+    </header>
+
+    <main class="public-main">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
