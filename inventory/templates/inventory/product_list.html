@@ -5,6 +5,17 @@
 {% block content %}
     <h2>Product List</h2>
 
+    <form method="get" action="{% url 'inventory:product_list' %}">
+        <input type="text" name="search" placeholder="Search by name or SKU" value="{{ search }}">
+
+        <button type="submit">Search</button>
+
+        {% if search %}
+            <a href="{% url 'inventory:product_list' %}">Clear</a>
+        {% endif %}
+
+    </form>
+
     <a href="{% url 'inventory:product_create' %}">Add Product</a>
 
     <table>
@@ -28,9 +39,7 @@
                 <td>{{ product.price }}</td>
                 <td>
                     <a href="{% url 'inventory:product_edit' pk=product.pk %}">Edit</a>
-                </td>
 
-                <td>
                     <a href="{% url 'inventory:product_delete' pk=product.pk %}">Delete</a>
                 </td>
             </tr>

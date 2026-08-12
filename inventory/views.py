@@ -1,13 +1,24 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 
 from .forms import ProductForm
 from .models import Product
 
 def product_list(request):
     products = Product.objects.all()
+
+    search = request.GET.get("search", "").strip()
+
+    if search:
+        products = products.filter(
+            Q(name__icontains=search) | Q(sku__icontains=search)
+        )
     return render(request, "inventory/product_list.html", 
-                  {"products": products})
+                  {
+                      "products": products,
+                      "search": search
+                   }
+                  )
 
 def product_create(request):
     if request.method == "POST":
