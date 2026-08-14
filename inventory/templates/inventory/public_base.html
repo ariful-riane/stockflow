@@ -86,10 +86,17 @@
                             </button>
                         </div>
                     </div>
+                    {% if user.is_authenticated %}
+                        <span class="me-2">Hi, {{ user.username }}</span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-stockflow-outline">Log Out</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-stockflow-outline">Log In</a>
 
-                    <a href="#" class="btn btn-stockflow-outline">Log In</a>
-
-                    <a href="#" class="btn btn-stockflow">Sign Up</a>
+                        <a href="{% url 'signup' %}" class="btn btn-stockflow">Sign Up</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>

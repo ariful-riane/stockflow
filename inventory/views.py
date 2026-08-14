@@ -1,3 +1,6 @@
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import ProtectedError, Q
 
@@ -7,6 +10,18 @@ from .models import Product, Category
 def index(request):
     return render(request, "inventory/index.html")
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
+@login_required
 def product_list(request):
     products = Product.objects.select_related("category").all().order_by("name")
     categories = Category.objects.all().order_by("name")
@@ -39,6 +54,7 @@ def product_list(request):
                    }
                   )
 
+@login_required
 def product_create(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -52,6 +68,7 @@ def product_create(request):
                     {"form": form}
                 )
 
+@login_required
 def product_edit(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
@@ -70,6 +87,7 @@ def product_edit(request, pk):
                     }
                 )
 
+@login_required
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
