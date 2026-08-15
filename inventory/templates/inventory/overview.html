@@ -1,0 +1,62 @@
+{% extends "inventory/public_base.html"%}
+
+{% block title %}StockFlow Overview{% endblock %}
+
+{%  block content %}
+
+<section class="overview-page">
+    <div class="container">
+        <div class="overview-heading">
+
+            <h1 class="overview-title">
+                Inventory management made <span class="hero-highlight">clear</span>
+            </h1>
+
+            <p class="overview-introduction">
+                StockFlow is the simple way to manage your products, observe inventory levels and keep record of changes to your stock.
+            </p>
+        </div>
+
+        <div class="row g-4 overview-features">
+
+            <div class="col-md-6 col-lg-4">
+                <div class="overview-card">
+                    <i class="bi bi-box-seam overview-icon"></i>
+
+                    <h2>Manage Products</h2>
+
+                    <p>
+                        Create, update and organise products seamlessly while maintaining essential information and attributes in one place.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="overview-card">
+                    <i class="bi bi-graph-up overview-icon"></i>
+
+                    <h2>Track Stock</h2>
+
+                    <p>
+                        Manage quantities, track stock levels, and be alerted when products are running low, ensuring you never run out of essential items.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="overview-card">
+                    <i class="bi bi-clock-history overview-icon"></i>
+
+                    <h2>View History</h2>
+
+                    <p>
+                        Record the history of your stock changes and maintain a clear audit trail.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+

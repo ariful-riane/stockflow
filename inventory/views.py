@@ -5,11 +5,45 @@ from django.contrib.auth import views as auth_views
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import ProtectedError, Q
 
-from .forms import ProductForm
+from django.conf import settings
+from django.contrib import messages
+from django.core.mail import EmailMessage
+
+from .forms import ContactForm, ProductForm
 from .models import Product, Category
 
 def index(request):
     return render(request, "inventory/index.html")
+
+def overview(request):
+    return render(request, "inventory/overview.html")
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            message = form.cleaned_data["message"]
+
+            email_message = EmailMessage(
+                subject=f"Contact Form Submission from {name}",
+                body=(
+                    f"Name: {name}\n"
+                    f"Email: {email}\n\n"
+                    f"{message}"
+                ),
+                from_email=None,
+                to=[settings.CONTACT_EMAIL],
+                reply_to=[email],
+            )
+            email_message.send(using="default")
+
+            messages.success(request, "Your message has been sent successfully.")
+            return redirect("inventory:contact")
+    else:
+        form = ContactForm()
+    return render(request, "inventory/contact.html", {"form": form})
 
 def login_view(request):
     if request.user.is_authenticated:

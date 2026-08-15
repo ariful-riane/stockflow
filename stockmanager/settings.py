@@ -133,6 +133,8 @@ MAILERS = {
     },
 }
 
+CONTACT_EMAIL = "stockflow@example.com"
+
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/products/'
 LOGOUT_REDIRECT_URL = '/'

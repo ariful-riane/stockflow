@@ -94,7 +94,7 @@ body {
 .btn-stockflow-outline {
     background-color: transparent;
     border: 2px solid var(--sf-secondary-accent);
-    color: var(--sf-secondary-accent)
+    color: var(--sf-secondary-accent);
 }
 
 .btn-stockflow-outline:hover {
@@ -201,4 +201,186 @@ body {
 
 .theme-option[hidden] {
     display: none;
+}
+
+/* Overview */
+
+.overview-page {
+    padding: 7rem 0;
+    min-height: calc(100vh - 73px);
+}
+
+.overview-heading {
+    max-width: 800px;
+    margin-bottom: 4rem;
+}
+
+.overview-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+}
+
+.overview-introduction {
+    line-height: 1.6;
+    opacity: 0.75;
+    font-size: 1.1rem;
+}
+
+.overview-card {
+    height: 100%;
+    padding: 2rem;
+
+    background-color: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    border-radius: 0.5rem;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.overview-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--sf-primary);
+}
+
+.overview-icon {
+    display: inline-block;
+    color: var(--sf-accent);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.overview-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.overview-card p {
+    margin: 0;
+    line-height: 1.5;
+    opacity: 0.75;
+}
+
+/* Contact */
+
+.contact-page {
+    padding: 7rem 0;
+    min-height: calc(100vh - 73px);
+}
+
+.contact-heading {
+    max-width: 800px;
+    margin-bottom: 4rem;
+}
+
+.contact-eyebrow {
+    color: var(--sf-primary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.5rem;
+}
+
+.contact-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+}
+
+.contact-introduction {
+    max-width: 800px;
+    line-height: 1.6;
+    opacity: 0.75;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+}
+
+.contact-form-card {
+    padding: 2.5rem;
+
+    background-color: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    border-radius: 0.5rem;
+}
+
+.contact-form-card .form-label {
+    color: var(--sf-text);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.stockflow-input {
+    background-color: var(--sf-bg);
+    border: 1px solid var(--sf-border);
+    color: var(--sf-text);
+    border-radius: 0.5rem;
+    padding: 0.8rem 1rem;
+}
+
+.stockflow-input::placeholder {
+    color: var(--sf-text);
+    opacity: 0.45;
+}
+
+.stockflow-input:focus {
+    background-color: var(--sf-bg);
+    border-color: var(--sf-primary);
+    color: var(--sf-text);
+    box-shadow: 0 0 0 0.2rem rgba(80, 125, 188, 0.25);
+}
+
+textarea.stockflow-input {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.contact-icon {
+    color: var(--sf-accent);
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.contact-info-item h2{
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.contact-info-item p {
+    margin: 0;
+    line-height: 1.5;
+    opacity: 0.75;
+}
+
+.contact-success {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+
+    border: 1px solid var(--sf-primary);
+    border-radius: 0.5rem;
+
+    color: var(--sf-text);
+}
+
+.contact-error {
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    color: #dc3545;
 }
