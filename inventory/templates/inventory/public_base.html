@@ -151,7 +151,7 @@
             }
         };
 
-        mainButton.addEventListener("click", () =>{
+        mainButton.addEventListener("click", (event) =>{
             const current = getTheme();
             const next =
                 themes[(themes.indexOf(current) + 1) % themes.length];
