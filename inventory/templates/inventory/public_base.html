@@ -32,6 +32,8 @@
 
     <link rel="stylesheet" href="{% static 'inventory/css/public.css' %}">
 
+    <link rel="stylesheet" href="{% static 'inventory/css/app.css' %}">
+
 </head>
 
 <body>
@@ -87,10 +89,44 @@
                         </div>
                     </div>
                     {% if user.is_authenticated %}
-                        <span class="me-2">Hi, {{ user.username }}</span>
-                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        <div
+                            class="nav-rotator"
+                            id="navRotator"
+                        >
+                            <span
+                                class="nav-rotator-state nav-rotator-user is-active"
+                                id="navRotatorUser"
+                                title="Hi, {{ user.username }}!"
+                            >
+                                Hi, {{ user.username }}!
+                            </span>
+
+                            <a
+                                href="{% url 'inventory:product_list' %}"
+                                class="nav-rotator-state nav-rotator-products"
+                                id="navRotatorProducts"
+                                aria-hidden="true"
+                                tabindex="-1"
+                            >
+                                <i class="bi bi-box-seam me-1"></i>
+                                Products
+                            </a>
+
+                        </div>
+
+                        <form
+                            action="{% url 'logout' %}"
+                            method="post"
+                            class="d-inline"
+                        >
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-stockflow-outline">Log Out</button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-stockflow-outline"
+                            >
+                                Log Out
+                            </button>
                         </form>
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-stockflow-outline">Log In</a>
@@ -176,6 +212,85 @@
 
         setTheme(getTheme(), false);
     </script>
+
+    <script>
+        (() => {
+            const navRotator = document.getElementById("navRotator");
+            
+            if (!navRotator) return;
+
+            const userState = document.getElementById("navRotatorUser");
+
+            const productsState = document.getElementById("navRotatorProducts");
+
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+            let showingProducts = false;
+            let rotationTimer = null;
+
+            const showState = (showProducts) => {
+                showingProducts = showProducts;
+
+                userState.classList.toggle("is-active", !showingProducts);
+                productsState.classList.toggle("is-active", showingProducts);
+
+                userState.setAttribute("aria-hidden", showingProducts ? "true" : "false");
+                productsState.setAttribute("aria-hidden", showingProducts ? "false" : "true");
+
+                productsState.tabIndex = showingProducts ? 0 : -1;
+            };
+
+            const stopRotation = () => {
+                if (rotationTimer) {
+                    clearInterval(rotationTimer);
+                    rotationTimer = null;
+                }
+            };
+
+            const startRotation = () => {
+
+                stopRotation();
+
+                if (reducedMotion.matches) return;
+
+                rotationTimer = setInterval(() => {
+                    showState(!showingProducts);
+                }, 4000);
+            };
+
+            const showProducts = () => {
+                stopRotation();
+                showState(true);
+            };
+
+            const resumeRotation = () => {
+                showState(false);
+                startRotation();
+            };
+
+            navRotator.addEventListener("mouseenter", showProducts);
+
+            navRotator.addEventListener("mouseleave", resumeRotation);
+            
+            navRotator.addEventListener("focusin", showProducts);
+
+            navRotator.addEventListener(
+                "focusout",
+                (event) => {
+                    if (
+                        !navRotator.contains(
+                            event.relatedTarget
+                        )
+                    ) {
+                        resumeRotation();
+                    }
+                }
+            );
+
+            showState(false);
+            startRotation();
+        })();
+</script>
 
 </body>
 </html>

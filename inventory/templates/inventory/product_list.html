@@ -2,67 +2,246 @@
 
 {% block title %}Products | StockFlow{% endblock %}
 
-{% block content %}
-    <h2>Product List</h2>
+{% block app_content %}
+<div class="products-page">
+    <div class="products-heading">
+        <div>
+            <h1 class="products-title">Products</h1>
 
-    <form method="get" action="{% url 'inventory:product_list' %}">
-        <input type="text" name="search" placeholder="Search by name or SKU" value="{{ search }}">
+            <p class="products-introduction">
+                Manage your products and keep track of your inventory.
+            </p>
+        </div>
 
-        <select name="category">
-            <option value="">All Categories</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}" {% if category.id == selected_category_id %}selected{% endif %}>
-                    {{ category.name }}
-                </option>
-            {% endfor %}
-        </select>
+        <a
+            href="{% url 'inventory:product_create' %}"
+            class="btn btn-stockflow"
+        >
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Product
+        </a>
+    </div>
 
-        <button type="submit">Filter</button>
+    <div class="product-toolbar">
+        <form
+            method="get"
+            action="{% url 'inventory:product_list' %}"
+            class="product-filter-form"
+        >
+            <div class="product-search">
+                <i class="bi bi-search product-search-icon"></i>
 
-        {% if search or selected_category_id %}
-            <a href="{% url 'inventory:product_list' %}">Clear</a>
-        {% endif %}
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control stockflow-app-input"
+                    placeholder="Search by name or SKU"
+                    value="{{ search }}"
+                    aria-label="Search products"
+                >
+            </div>
+            <div class="dropdown product-category-dropdown" id="categoryDropdown">
+                <input
+                    type="hidden"
+                    name="category"
+                    id="category"
+                    value="{% if selected_category_id %}{{ selected_category_id }}{% endif %}"
+                >
 
-    </form>
+                <button
+                    type="button"
+                    class="product-category-toggle"
+                    id="categoryDropdownToggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    <span id="categoryDropdownLabel">
+                        {% if selected_category_id %}
+                            {% for category in categories %}
+                                {% if category.id == selected_category_id %}
+                                    {{ category.name }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            All Categories
+                        {% endif %}
+                    </span>
 
-    <a href="{% url 'inventory:product_create' %}">Add Product</a>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>SKU</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.sku }}</td>
-                <td>{{ product.category }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.price }}</td>
-                <td>
-                    <a href="{% url 'inventory:product_edit' pk=product.pk %}">Edit</a>
+                <div class="dropdown-menu product-category-menu">
+                    <button
+                        type="button"
+                        class="dropdown-item product-category-option {% if not selected_category_id %}active{% endif %}"
+                        data-category-value=""
+                    >
+                        All Categories
+                    </button>
 
-                    <a href="{% url 'inventory:product_delete' pk=product.pk %}">Delete</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6">
-                    {% if search or selected_category_id %}
-                        No products found.
-                    {% else %}
-                        No products available.
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    {% for category in categories %}
+                        <button
+                            type="button"
+                            class="dropdown-item product-category-option {% if category.id == selected_category_id %}active{% endif %}"
+                            data-category-value="{{ category.id }}"
+                        >
+                            {{ category.name }}
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-stockflow"
+            >
+                <i class="bi bi-funnel me-1"></i>
+                Filter
+            </button>
+
+            {% if search or selected_category_id %}
+                <a href="{% url 'inventory:product_list' %}" class="btn btn-stockflow-outline">
+                    Clear
+                </a>
+            {% endif %}
+        </form>
+    </div> 
+
+    <div class="product-table-card">
+        <div class="table-responsive">
+            <table class="table product-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">SKU</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td class="product-id">#{{ product.id }}</td>
+
+                        <td class="product-name">{{ product.name }}</td>
+
+                        <td>
+                            <span class="product-sku">{{ product.sku }}</span>
+                        </td>
+
+                        <td>{{ product.category }}</td>
+
+                        <td>
+                            <strong>
+                                {{ product.quantity }}
+                            </strong>
+
+                            <span class="product-minimum">
+                                Min: {{ product.minimum_stock }}
+                            </span>
+                        </td>
+
+                        <td>{{ product.price }}</td>
+
+                        <td>
+                            {% if product.quantity == 0 %}
+                                <span class="stock-badge stock-out"> Out of Stock</span>
+                            {% elif product.is_low_stock %}
+                                <span class="stock-badge stock-low"> Low Stock</span>
+                            {% else %}
+                                <span class="stock-badge stock-good"> In Stock</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="product-actions">
+                                <a
+                                    href="{% url 'inventory:product_edit' pk=product.pk %}"
+                                    class="btn product-action-edit"
+                                    aria-label="Edit {{ product.name }}"
+                                >
+                                    <i class="bi bi-pencil"></i>
+                                    Edit
+                                </a>
+
+                                <a
+                                    href="{% url 'inventory:product_delete' pk=product.pk %}"
+                                    class="btn product-action-delete"
+                                    aria-label="Delete {{ product.name }}"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td
+                            colspan="8"
+                            class="product-empty-state"
+                        >
+
+                            <i class="bi bi-box-seam"></i>
+
+                            {% if search or selected_category_id %}
+                                <p>No products found.</p>
+                            {% else %}
+                                <p>No products available.</p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dropdown = document.getElementById('categoryDropdown');
+
+        const toggle = document.getElementById('categoryDropdownToggle');
+
+        const input = document.getElementById('category');
+
+        const label = document.getElementById('categoryDropdownLabel');
+
+        const options = document.querySelectorAll('.product-category-option');
+
+        const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
+
+        let hideTimer = null;
+
+        options.forEach((option) => {
+            option.addEventListener('click', () => {
+                input.value = option.dataset.categoryValue;
+
+                label.textContent = option.textContent.trim();
+
+                options.forEach((item) => {
+                    item.classList.remove('active');
+                });
+                option.classList.add('active');
+            });
+        });
+        dropdown.addEventListener('mouseleave', () => {
+                hideTimer = setTimeout(() => {
+                    dropdownInstance.hide();
+                }, 150);
+            });
+
+        dropdown.addEventListener('mouseenter', () => {
+            if (hideTimer !== null) {
+                clearTimeout(hideTimer);
+                hideTimer = null;
+            }
+        });
+    });
+</script>
 {% endblock %}
