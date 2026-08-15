@@ -1,10 +1,220 @@
 {% extends "inventory/public_base.html" %}
+
+{% block title %}StockFlow - Sign Up{% endblock %}
+
 {% block content %}
-<h2>Sign Up</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Sign Up</button>
-</form>
-<p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+
+<section class="auth-page">
+    <div class="container">
+        <div class="auth-card">
+
+          <div class="auth-heading">
+            <h1 class="auth-title">
+              Create your StockFlow <span class="hero-highlight">Account</span>
+            </h1>
+
+            <p class="auth-introduction">
+              Sign up to start managing your inventory and tracking your stock.
+            </p>
+          </div>
+
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+              {% for error in form.non_field_errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <form method="post" class="auth-form">
+            {% csrf_token %}
+            <div class="auth-field">
+                <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+
+                {{ form.username }}
+
+                {% if form.username.help_text %}
+                  <div class="auth-help">{{ form.username.help_text }}</div>
+                {% endif %}
+
+                {% for error in form.username.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+
+            </div>
+
+            <div class="auth-field">
+                <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                {{ form.password1 }}
+
+              <div
+                class="password-requirements"
+                id="passwordRequirements"
+                hidden
+              >
+                  <p class="password-requirements-title">Password Requirements:</p>
+
+                  <div
+                    class="password-requirement"
+                    id="requirementLength"
+                  >
+                      <i class="bi bi-circle requirement-icon"></i>
+                      <span>At least 8 characters</span>
+                  </div>
+                  
+                  <div
+                    class="password-requirement"
+                    id="requirementNumeric"
+                  >
+                      <i class="bi bi-circle requirement-icon"></i>
+                      <span>Cannot be entirely numeric</span>
+                  </div>
+
+                  <div
+                    class="password-requirement"
+                    id="requirementSimilarity"
+                  >
+                      <i class="bi bi-circle requirement-icon"></i>
+                      <span>Cannot be too similar to your username</span>
+                  </div>
+
+                  <div
+                    class="password-requirement"
+                    id="requirementCommon"
+                  >
+                      <i class="bi bi-circle requirement-icon"></i>
+                      <span>Cannot be a commonly used password</span>
+                  </div>
+                </div>
+
+                {% for error in form.password1.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="auth-field">
+                <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                {{ form.password2 }}
+
+                <div
+                  class="password-match"
+                  id="passwordMatch"
+                  hidden
+                >
+                    <i class="bi bi-check-circle-fill"></i>
+                    Passwords match
+                </div>
+
+                {% if form.password2.help_text %}
+                  <div class="auth-help">{{ form.password2.help_text }}</div>
+                {% endif %}
+
+                {% for error in form.password2.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-stockflow auth-submit">
+              <i class="bi bi-person-plus me-2"></i>
+              Sign Up
+            </button>
+          </form>
+
+          <p class="auth-switch">
+            Already have an account? <a href="{% url 'login' %}">Log In</a>
+          </p>
+      </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const usernameInput = document.getElementById(
+    "{{ form.username.id_for_label }}"
+  );
+
+  const passwordInput = document.getElementById(
+    "{{ form.password1.id_for_label }}"
+  );
+
+  const confirmPasswordInput = document.getElementById(
+    "{{ form.password2.id_for_label }}"
+  );
+
+  const passwordRequirements = document.getElementById("passwordRequirements");
+
+  const lengthRequirement = document.getElementById("requirementLength");
+
+  const numericRequirement = document.getElementById("requirementNumeric");
+
+  const similarityRequirement = document.getElementById(
+    "requirementSimilarity"
+  );
+
+  const commonRequirement = document.getElementById("requirementCommon");
+
+  const passwordMatch = document.getElementById("passwordMatch");
+
+  const updateRequirements = (element, met) => {
+    const icon = element.querySelector(".requirement-icon");
+    
+    element.classList.toggle("met", met);
+
+    icon.className = met
+      ? "bi bi-check-circle-fill requirement-icon"
+      : "bi bi-circle requirement-icon";
+  };
+
+  const checkPassword = () => {
+    const password = passwordInput.value;
+    const passwordLower = password.toLowerCase();
+
+    const username = usernameInput.value.trim().toLowerCase();
+
+    updateRequirements(lengthRequirement, password.length >= 8);
+
+    updateRequirements(numericRequirement, password.length > 0 && !/^\d+$/.test(password));
+
+    const sufficientlyDifferent =
+      username.length > 0 &&
+      passwordLower.length > 0 &&
+      !passwordLower.includes(username) &&
+      !username.includes(passwordLower);
+    updateRequirements(
+      similarityRequirement,
+      sufficientlyDifferent
+    );
+
+    updateRequirements(commonRequirement, false);
+  };
+
+  const checkPasswordMatch = () => {
+    const matches =
+      confirmPasswordInput.value.length > 0 &&
+      passwordInput.value === confirmPasswordInput.value;
+    passwordMatch.hidden = !matches;
+  };
+
+  passwordInput.addEventListener("input", () => {
+    checkPassword();
+    checkPasswordMatch();
+  });
+
+  usernameInput.addEventListener("input", checkPassword);
+
+  confirmPasswordInput.addEventListener("input", checkPasswordMatch);
+
+  passwordInput.addEventListener("focus", () => {
+    passwordRequirements.hidden = false;
+  });
+
+  passwordInput.addEventListener("blur", () => {
+    passwordRequirements.hidden = true;
+  });
+
+  checkPassword();
+  checkPasswordMatch();
+});
+</script>
+
 {% endblock %}

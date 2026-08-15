@@ -266,7 +266,7 @@ body {
     opacity: 0.75;
 }
 
-/* Contact */
+/* Contact style */
 
 .contact-page {
     padding: 7rem 0;
@@ -383,4 +383,190 @@ textarea.stockflow-input {
     margin-top: 0.4rem;
     font-size: 0.9rem;
     color: #dc3545;
+}
+
+/* Authentication style */
+
+.auth-page {
+    min-height: calc(100vh - 73px);
+
+    display: flex;
+    align-items: center;
+
+    padding: 7rem 0;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 500px;
+
+    margin: 0 auto;
+    padding: 2.5rem;
+
+    background-color: var(--sf-surface);
+
+    border: 1px solid var(--sf-border);
+    border-radius: 0.75rem;
+}
+
+.auth-heading {
+    margin-bottom: 2rem;
+}
+
+.auth-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+}
+
+.auth-introduction {
+    line-height: 1.6;
+    opacity: 0.75;
+    color: var(--sf-text);
+    margin: 0;
+}
+
+.auth-field {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .form-label {
+    color: var(--sf-text);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+    display: block;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background-color: var(--sf-bg);
+    color: var(--sf-text);
+    border: 1px solid var(--sf-border);
+    border-radius: 0.5rem;
+
+    outline: none;
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus {
+    border-color: var(--sf-primary);
+
+    box-shadow: 0 0 0 0.2rem rgba(80, 125, 188, 0.25);
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    margin-top: 0.5rem;
+    font-weight: 700;
+}
+
+.auth-switch {
+    margin: 2rem 0 0;
+    text-align: center;
+    color: var(--sf-text);
+}
+
+.auth-switch a {
+    color: var(--sf-accent);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+.auth-help {
+    margin-top: 0.6rem;
+    color: var(--sf-text);
+    opacity: 0.75;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.auth-help ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.2rem;
+}
+
+.auth-help li {
+    margin-bottom: 0.3rem;
+}
+
+.password-requirements {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--sf-bg);
+    border: 1px solid var(--sf-border);
+    border-radius: 0.5rem;
+    animation: password-requirements-in 0.3s ease;
+}
+
+.password-requirements-title {
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--sf-text);
+    font-size: 0.95rem;
+}
+
+.password-requirement {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--sf-text);
+    opacity: 0.55;
+    font-size: 0.9rem;
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease,
+        font-weight 0.2s ease;
+}
+
+.password-requirement:last-child {
+    margin-bottom: 0;
+}
+
+.requirement-icon {
+    font-size: 0.8rem;
+}
+
+.password-requirement.met {
+    color: #198754;
+    font-weight: 700;
+    opacity: 1;
+}
+
+.password-requirement.met .requirement-icon {
+    font-size: 1rem;
+}
+
+.password-match {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    color: #198754;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+@keyframes password-requirements-in {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
