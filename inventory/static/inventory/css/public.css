@@ -82,6 +82,7 @@ body {
 .home-action-card {
     width: 100%;
     max-width: 330px;
+    padding: 2.25rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -102,7 +103,7 @@ body {
         box-shadow 0.3s ease;
 }
 
-.home-action-card:hover
+.home-action-card:hover,
 .home-action-card:focus-visible {
     color: var(--sf-text);
     transform: translateY(-4px);
@@ -125,6 +126,110 @@ body {
 
 .home-action-icon > .bi:first-child {
     font-size: 4.5rem;
+}
+
+/*Logged Out card*/
+
+.home-start-icon > .bi-box-seam {
+    transition:
+        transform 0.3s ease,
+        color 0.3s ease;
+}
+
+.home-start-icon > .bi-plus-circle-fill {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    font-size: 1.5rem;
+    transform: translateY(-50%) scale(1);
+    transition:
+        transform 0.3s ease,
+        color 0.3s ease;
+}
+
+.home-start-card:hover .home-start-icon > .bi-box-seam,
+.home-start-card:focus-visible .home-start-icon > .bi-box-seam {
+    transform: translateY(-4px);
+}
+
+.home-start-card:hover .home-start-icon > .bi-plus-circle-fill,
+.home-start-card:focus-visible .home-start-icon > .bi-plus-circle-fill {
+    transform: translateY(-50%) scale(1.2) rotate(90deg);
+}
+
+/* Logged In card */
+.inventory-box {
+    position: relative;
+    width: 90px;
+    height: 78px;
+}
+
+.inventory-box-body {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 78px;
+    height: 48px;
+    transform: translateX(-50%);
+    background-color: var(--sf-bg);
+    border: 3px solid var(--sf-accent);
+    border-radius: 0.25rem 0.25rem 0.5rem 0.5rem;
+    z-index: 2;
+}
+
+.inventory-box-body::after {
+    content: "";
+    position: absolute;
+    top: 0%;
+    bottom: 0%;
+    left: 50%;
+    width: 14px;
+    transform: translateX(-50%);
+    background-color: rgba(80, 125, 188, 0.15);
+}
+
+.inventory-box-lid {
+    position: absolute;
+    top: 13px;
+    width: 41px;
+    height: 22px;
+    background-color: var(--sf-surface);
+    border: 3px solid var(--sf-accent);
+    transition:
+        transform 0.35s ease,
+        background-color 0.3s ease;
+    z-index: 3;
+}
+
+.inventory-box-lid-left {
+    left: 4px;
+    border-radius: 0.4rem 0 0 0.2rem;
+    transform-origin: right bottom;
+}
+
+.inventory-box-lid-right {
+    right: 4px;
+    border-radius: 0 0.4rem 0.2rem 0;
+    transform-origin: left bottom;
+}
+
+.home-products-card:hover .inventory-box-lid-left,
+.home-products-card:focus-visible .inventory-box-lid-left {
+    transform:
+        translateX(-5px)
+        rotate(-24deg);
+}
+
+.home-products-card:hover .inventory-box-lid-right,
+.home-products-card:focus-visible .inventory-box-lid-right {
+    transform:
+        translateX(5px)
+        rotate(24deg);
+}
+
+.home-products-card:hover .inventory-box-item-right,
+.home-products-card:focus-visible .inventory-box-item-right {
+    transform: translate(4px, -8px) rotate(8deg);
 }
 
 .home-action-content {
@@ -657,7 +762,16 @@ textarea.stockflow-input {
 }
 
 @media (max-width: 991.98px) {
-    .hero-action {
+    .home-action-card {
         margin-top: 4rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-action-card,
+    .home-action-link i,
+    .inventory-box-lid,
+    .home-start-icon > .bi {
+        transition: none;
     }
 }
