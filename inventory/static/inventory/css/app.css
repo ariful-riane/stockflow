@@ -179,11 +179,6 @@
 }
 
 .product-category-option.active {
-    background-color: var(--sf-primary);
-    color: white;
-}
-
-.product-category-option.active {
     color: var(--sf-primary);
     background-color: rgba(80, 125, 188, 0.08);
     font-weight: 600;
