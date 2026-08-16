@@ -1,28 +1,82 @@
 {% extends "inventory/base.html" %}
 
-{%block title%}
-Delete Product | StockFlow
+{% block title %}
+    Delete Product | StockFlow
 {% endblock %}
 
 {% block app_content %}
-    <h2>Delete Product</h2>
-    
-    {% if cannot_delete %}
+    <section class="product-delete-page">
+        <div class="product-delete-card">
 
-        <p>Cannot be deleted because it has stock movement history.</p>
+            {% if cannot_delete %}
+                <div class="product-delete-icon product-delete-icon-blocked">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
 
-        <a href="{% url 'inventory:product_list' %}">Back to Product List</a>
+                <h1 class="product-delete-title">
+                    Cannot Delete Product
+                </h1>
 
-    {% else %}
+                <p class="product-delete-message">
+                    <strong>{{ product.name }}</strong> cannot be deleted because
+                    it has stock movement history.
+                </p>
 
-        <p>Are you sure you want to delete the product: "{{ product.name }}"?</p>
+                <div class="product-delete-details">
+                    <span>{{ product.sku }}</span>
+                    <span>{{ product.category }}</span>
+                </div>
 
-        <form method="post">
+                <div class="product-delete-actions">
+                    <a
+                        href="{% url 'inventory:product_list' %}"
+                        class="btn btn-stockflow"
+                    >
+                        Back to Products
+                    </a>
+                </div>
 
-            {% csrf_token %}
-            <button type="submit">Confirm Delete</button>
-            <a href="{% url 'inventory:product_list' %}">Cancel</a>
+            {% else %}
+                <div class="product-delete-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
 
-        </form>
-    {% endif %}
+                <h1 class="product-delete-title">
+                    Delete Product?
+                </h1>
+
+                <p class="product-delete-message">
+                    Are you sure you want to delete
+                    <strong>{{ product.name }}</strong>?
+                    This action cannot be undone.
+                </p>
+
+                <div class="product-delete-details">
+                    <span>{{ product.sku }}</span>
+                    <span>{{ product.category }}</span>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="product-delete-actions">
+                        <button
+                            type="submit"
+                            class="btn product-delete-button"
+                        >
+                            <i class="bi bi-trash me-1"></i>
+                            Delete Product
+                        </button>
+
+                        <a
+                            href="{% url 'inventory:product_list' %}"
+                            class="btn btn-stockflow-outline"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}

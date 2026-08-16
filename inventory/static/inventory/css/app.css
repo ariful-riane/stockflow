@@ -425,6 +425,90 @@
     margin-top: 2rem;
 }
 
+.product-delete-page {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.product-delete-card {
+    padding: 2.5rem;
+    text-align: center;
+    background-color: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    border-radius: 0.75rem;
+}
+
+.product-delete-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: #DC3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 50%;
+    font-size: 1.75rem;
+}
+
+.product-delete-icon-blocked {
+    color: var(--sf-primary);
+    background-color: rgba(80, 125, 188, 0.1);
+}
+
+.product-delete-title {
+    margin-bottom: 1rem;
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+.product-delete-message {
+    max-width: 470px;
+    margin: 0 auto 1.5rem;
+    color: var(--sf-text);
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+.product-delete-details {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.product-delete-details span {
+    padding: 0.35rem 0.75rem;
+    color: var(--sf-text);
+    background-color: var(--sf-bg);
+    border: 1px solid var(--sf-border);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.product-delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.product-delete-button {
+    color: white;
+    background-color: #DC3545;
+    border: 1px solid #DC3545;
+}
+
+.product-delete-button:hover,
+.product-delete-button:focus {
+    color: white;
+    background-color: #BB2D3B;
+    border-color: #B02A37;
+}
+
 @media (max-width: 767.98px) {
     .products-heading {
         flex-direction: column;
@@ -458,6 +542,27 @@
     }
 
     .product-form-actions .btn {
+        width: 100%;
+    }
+
+    .product-delete-page {
+        padding: 0;
+    }
+
+    .product-delete-card {
+        padding: 1.5rem;
+    }
+
+    .product-delete-details {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-delete-actions {
+        flex-direction: column;
+    }
+
+    .product-delete-actions .btn {
         width: 100%;
     }
 }
