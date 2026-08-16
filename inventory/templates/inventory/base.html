@@ -1,4 +1,5 @@
 {% extends "inventory/public_base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -7,4 +8,8 @@
         {% block app_content %}{% endblock %}
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'inventory/js/app.js' %}"></script>
 {% endblock %}

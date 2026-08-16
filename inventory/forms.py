@@ -12,6 +12,21 @@ class ProductForm(forms.ModelForm):
             'minimum_stock',
         ]
 
+        labels = {
+            'sku': 'SKU',
+        }
+
+        widgets = {
+            'name': forms.TextInput(
+                attrs={'class': 'form-control product-form-control'}),
+            'sku': forms.TextInput(
+                attrs={'class': 'form-control product-form-control'}),
+            'price': forms.NumberInput(
+                attrs={'class': 'form-control product-form-control'}),
+            'minimum_stock': forms.NumberInput(
+                attrs={'class': 'form-control product-form-control'}),
+        }
+
 class ContactForm(forms.Form):
     name = forms.CharField(
         max_length=100,

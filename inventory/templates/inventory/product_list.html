@@ -40,11 +40,16 @@
                     aria-label="Search products"
                 >
             </div>
-            <div class="dropdown product-category-dropdown" id="categoryDropdown">
+                <div
+                    class="dropdown product-category-dropdown"
+                    id="categoryDropdown"
+                    data-category-dropdown
+                >
                 <input
                     type="hidden"
                     name="category"
                     id="category"
+                    data-category-input
                     value="{% if selected_category_id %}{{ selected_category_id }}{% endif %}"
                 >
 
@@ -54,8 +59,9 @@
                     id="categoryDropdownToggle"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    data-category-toggle
                 >
-                    <span id="categoryDropdownLabel">
+                    <span id="categoryDropdownLabel" data-category-label>
                         {% if selected_category_id %}
                             {% for category in categories %}
                                 {% if category.id == selected_category_id %}
@@ -74,6 +80,7 @@
                     <button
                         type="button"
                         class="dropdown-item product-category-option {% if not selected_category_id %}active{% endif %}"
+                        data-category-option
                         data-category-value=""
                     >
                         All Categories
@@ -83,6 +90,7 @@
                         <button
                             type="button"
                             class="dropdown-item product-category-option {% if category.id == selected_category_id %}active{% endif %}"
+                            data-category-option
                             data-category-value="{{ category.id }}"
                         >
                             {{ category.name }}
@@ -202,46 +210,4 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const dropdown = document.getElementById('categoryDropdown');
-
-        const toggle = document.getElementById('categoryDropdownToggle');
-
-        const input = document.getElementById('category');
-
-        const label = document.getElementById('categoryDropdownLabel');
-
-        const options = document.querySelectorAll('.product-category-option');
-
-        const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
-
-        let hideTimer = null;
-
-        options.forEach((option) => {
-            option.addEventListener('click', () => {
-                input.value = option.dataset.categoryValue;
-
-                label.textContent = option.textContent.trim();
-
-                options.forEach((item) => {
-                    item.classList.remove('active');
-                });
-                option.classList.add('active');
-            });
-        });
-        dropdown.addEventListener('mouseleave', () => {
-                hideTimer = setTimeout(() => {
-                    dropdownInstance.hide();
-                }, 150);
-            });
-
-        dropdown.addEventListener('mouseenter', () => {
-            if (hideTimer !== null) {
-                clearTimeout(hideTimer);
-                hideTimer = null;
-            }
-        });
-    });
-</script>
 {% endblock %}
