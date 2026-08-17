@@ -17,17 +17,10 @@
                     Cannot Delete Product
                 </h1>
 
-                {% if has_stock %}
-                    <p class="product-delete-message">
-                        <strong>{{ product.name }}</strong> cannot be deleted because
-                        it currently has stock. Please reduce the stock to 0 before deleting the product.
-                    </p>
-                {% else %}
-                    <p class="product-delete-message">
-                        <strong>{{ product.name }}</strong> cannot be deleted because
-                        it has stock movement history.
-                    </p>
-                {% endif %}
+                <p class="product-delete-message">
+                    <strong>{{ product.name }}</strong> cannot be deleted because
+                    it has stock movement history.
+                </p>
 
                 <div class="product-delete-details">
                     <span>{{ product.sku }}</span>
