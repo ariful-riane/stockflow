@@ -80,10 +80,10 @@
 
                   <div
                     class="password-requirement"
-                    id="requirementCommon"
+                    id="requirementSpecial"
                   >
                       <i class="bi bi-circle requirement-icon"></i>
-                      <span>Cannot be a commonly used password</span>
+                      <span>Must contain a special character</span>
                   </div>
                 </div>
 
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "requirementSimilarity"
   );
 
-  const commonRequirement = document.getElementById("requirementCommon");
+  const specialRequirement = document.getElementById("requirementSpecial");
 
   const passwordMatch = document.getElementById("passwordMatch");
 
@@ -185,7 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
       sufficientlyDifferent
     );
 
-    updateRequirements(commonRequirement, false);
+    const hasSpecialCharacter = /[^A-Za-z0-9]/.test(password);
+    console.log(password, hasSpecialCharacter),
+    updateRequirements(specialRequirement, hasSpecialCharacter);
   };
 
   const checkPasswordMatch = () => {
