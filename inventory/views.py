@@ -171,6 +171,7 @@ def product_delete(request, pk):
                           {
                               "product": product,
                               "cannot_delete": True,
+                              "has_stock": True,
                           }
                         )
 
