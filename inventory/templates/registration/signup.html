@@ -186,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     const hasSpecialCharacter = /[^A-Za-z0-9]/.test(password);
-    console.log(password, hasSpecialCharacter),
     updateRequirements(specialRequirement, hasSpecialCharacter);
   };
 
