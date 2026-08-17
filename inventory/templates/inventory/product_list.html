@@ -35,47 +35,46 @@
                     type="text"
                     name="search"
                     class="form-control stockflow-app-input"
-                    placeholder="Search by name, SKU or ID"
+                    placeholder="Search by name or SKU"
                     value="{{ search }}"
                     aria-label="Search products"
                 >
             </div>
-            
-            <div
-                class="dropdown product-category-dropdown"
-                id="categoryDropdown"
-                data-category-dropdown
-            >
-            <input
-                type="hidden"
-                name="category"
-                id="category"
-                data-category-input
-                value="{% if selected_category_id %}{{ selected_category_id }}{% endif %}"
-            >
+                <div
+                    class="dropdown product-category-dropdown"
+                    id="categoryDropdown"
+                    data-category-dropdown
+                >
+                <input
+                    type="hidden"
+                    name="category"
+                    id="category"
+                    data-category-input
+                    value="{% if selected_category_id %}{{ selected_category_id }}{% endif %}"
+                >
 
-            <button
-                type="button"
-                class="product-category-toggle"
-                id="categoryDropdownToggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                data-category-toggle
-            >
-                <span id="categoryDropdownLabel" data-category-label>
-                    {% if selected_category_id %}
-                        {% for category in categories %}
-                            {% if category.id == selected_category_id %}
-                                {{ category.name }}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        All Categories
-                    {% endif %}
-                </span>
+                <button
+                    type="button"
+                    class="product-category-toggle"
+                    id="categoryDropdownToggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    data-category-toggle
+                >
+                    <span id="categoryDropdownLabel" data-category-label>
+                        {% if selected_category_id %}
+                            {% for category in categories %}
+                                {% if category.id == selected_category_id %}
+                                    {{ category.name }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            All Categories
+                        {% endif %}
+                    </span>
 
-                <i class="bi bi-chevron-down"></i>
-            </button>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
 
                 <div class="dropdown-menu product-category-menu">
                     <button
@@ -99,106 +98,6 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <div 
-                class="dropdown product-category-dropdown"
-                id="statusDropdown"
-                data-status-dropdown
-        >
-            <input
-                type="hidden"
-                name="status"
-                id="status"
-                data-status-input
-                value="{{ selected_status }}"
-            >
-
-            <button
-                type="button"
-                class="product-category-toggle"
-                id="statusDropdownToggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                data-category-toggle
-            >
-                <span id="categoryDropdownLabel" data-status-label>
-                    {% if selected_status == "in_stock" %}
-                        In Stock
-                    {% elif selected_status == "low_stock" %}
-                        Low Stock
-                    {% elif selected_status == "out_of_stock" %}
-                        Out of Stock
-                    {% else %}
-                        All Statuses
-                    {% endif %}
-                </span>
-
-                <i class="bi bi-chevron-down"></i>
-            </button>
-
-            <div class="dropdown-menu product-category-menu">
-
-                <button
-                    type="button"
-                    class="dropdown-item product-status-option {% if not selected_status %}active{% endif %}"
-                    data-status-option
-                    data-status-value=""
-                >
-                    All Statuses
-                </button>
-
-                <button
-                    type="button"
-                    class="dropdown-item product-status-option {% if selected_status == 'in_stock' %}active{% endif %}"
-                    data-status-option
-                    data-status-value="in"
-                >
-                    In Stock
-                </button>
-
-                <button
-                    type="button"
-                    class="dropdown-item product-category-option {% if selected_status == 'low_stock' %}active{% endif %}"
-                    data-status-option
-                    data-status-value="low"
-                >
-                    Low Stock
-                </button>
-
-                <button
-                    type="button"
-                    class="dropdown-item product-category-option {% if selected_status == 'out_of_stock' %}active{% endif %}"
-                    data-status-option
-                    data-status-value="out"
-                >
-                    Out of Stock
-                </button>
-
-            </div>
-        </div>
-        <div class="product-search">
-            <input
-                type="number"
-                name="min_price"
-                class="form-control stockflow-app-input"
-                placeholder="Min price"
-                min="0"
-                step="0.01"
-                value="{{ min_price }}"
-                >
-        </div>
-        <div class="product-search">
-            <input
-                type="number"
-                name="max_price"
-                class="form-control stockflow-app-input"
-                placeholder="Max price"
-                min="0"
-                step="0.01"
-                value="{{ max_price }}"
-            >
-        </div>
-
 
             <button
                 type="submit"

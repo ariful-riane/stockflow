@@ -1,16 +1,5 @@
 from django import forms
 from .models import Product
-import re 
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-
-class CustomUserCreationForm(UserCreationForm):
-    def clean_password1(self):
-        password = self.cleaned_data.get("password1")
-        if not re.search(r'[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]]', password):
-            self.add_error("password2", "This password must contain at least one special character.")
-        
-        return password
 
 class ProductForm(forms.ModelForm):
     class Meta:

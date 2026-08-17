@@ -1,12 +1,9 @@
-from .forms import CustomUserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.shortcuts import get_object_or_404, redirect, render
-from django.core.exceptions import ValidationError
-from django.db.models import ProtectedError, Q, F
-from .services import apply_stock_movement
-from .models import StockMovement
+from django.db.models import ProtectedError, Q
 
 from django.conf import settings
 from django.contrib import messages
@@ -55,13 +52,13 @@ def login_view(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('inventory:product_list')
     else:
-        form = CustomUserCreationForm()
+        form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 
@@ -73,15 +70,12 @@ def product_list(request):
 
     search = request.GET.get("search", "").strip()
     category_id = request.GET.get("category", "").strip()
-    status = request.GET.get("status", "").strip()
-    min_price = request.GET.get("min_price", "").strip()
-    max_price = request.GET.get("max_price", "").strip()
 
     selected_category_id = None
 
     if search:
         products = products.filter(
-            Q(name__icontains=search) | Q(sku__icontains=search) | Q(id__icontains=search)
+            Q(name__icontains=search) | Q(sku__icontains=search)
         )
 
     if category_id:
@@ -92,35 +86,13 @@ def product_list(request):
             selected_category_id = None
         else:
             products = products.filter(category_id=selected_category_id)
-    
-    if status == "out":
-        products = products.filter(quantity=0)
-    elif status == "low":
-        products = products.filter(quantity__gt=0, quantity__lte=F("minimum_stock"))
-    elif status == "in":
-        products = products.filter(quantity__gt=F("minimum_stock"))
-    
-    if min_price:
-        try:
-            products = products.filter(price__gte=min_price)
-        except ValueError:
-            pass
-    
-    if max_price:
-        try:
-            products = products.filter(price__lte=max_price)
-        except ValueError:
-            pass
 
     return render(request, "inventory/product_list.html", 
                   {
                       "products": products,
                       "search": search,
                       "categories": categories,
-                      "selected_category_id": selected_category_id,
-                      "status": status,
-                      "min_price": min_price,
-                      "max_price": max_price
+                      "selected_category_id": selected_category_id
                    }
                   )
 
@@ -168,14 +140,17 @@ def product_stock(request, pk):
             edit_quantity = form.cleaned_data["edit_quantity"]
 
             if action == "increase":
-                movement_type = StockMovement.MovementType.STOCK_IN
-            else:
-                movement_type = StockMovement.MovementType.STOCK_OUT
-            try:
-                apply_stock_movement(product=product,movement_type=movement_type, quantity=edit_quantity, user=request.user)
+                product.quantity += edit_quantity
+                product.save()
                 return redirect("inventory:product_list")
-            except ValidationError as e:
-                form.add_error("edit_quantity", e.message)
+            
+            elif action == "decrease":
+                if edit_quantity > product.quantity:
+                    form.add_error("edit_quantity", "You cannot remove more stock than is currently available.")
+                else:
+                    product.quantity -= edit_quantity
+                    product.save()
+                    return redirect("inventory:product_list")
     else:
         form = StockForm()
 
@@ -196,6 +171,7 @@ def product_delete(request, pk):
                           {
                               "product": product,
                               "cannot_delete": True,
+                              "has_stock": True,
                           }
                         )
 
