@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.mail import EmailMessage
 
-from .forms import ContactForm, ProductForm
+from .forms import ContactForm, ProductForm, StockForm
 from .models import Product, Category
 
 def index(request):
@@ -130,8 +130,49 @@ def product_edit(request, pk):
                 )
 
 @login_required
+def product_stock(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == "POST":
+        form = StockForm(request.POST)
+        if form.is_valid():
+            action = form.cleaned_data["action"]
+            edit_quantity = form.cleaned_data["edit_quantity"]
+
+            if action == "increase":
+                product.quantity += edit_quantity
+                product.save()
+                return redirect("inventory:product_list")
+            
+            elif action == "decrease":
+                if edit_quantity > product.quantity:
+                    form.add_error("edit_quantity", "You cannot remove more stock than is currently available.")
+                else:
+                    product.quantity -= edit_quantity
+                    product.save()
+                    return redirect("inventory:product_list")
+    else:
+        form = StockForm()
+
+    return render(
+        request,
+        "inventory/product_stock.html",{
+            "product": product,
+            "form": form,
+            }
+    )
+
+@login_required
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
+
+    if product.quantity > 0:
+        return render(request, "inventory/product_confirm_delete.html",
+                          {
+                              "product": product,
+                              "cannot_delete": True,
+                          }
+                        )
 
     if request.method == "POST":
         try:

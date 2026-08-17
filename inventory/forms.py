@@ -27,6 +27,27 @@ class ProductForm(forms.ModelForm):
                 attrs={'class': 'form-control product-form-control'}),
         }
 
+class StockForm(forms.Form):
+    ACTION_CHOICES =[
+        ("increase", "Increase Stock"),
+        ("decrease", "Decrease Stock"),
+    ]
+
+    action = forms.ChoiceField(
+        choices=ACTION_CHOICES,
+        widget=forms.RadioSelect
+    )
+
+    edit_quantity = forms.IntegerField(
+        min_value=1,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "min": 1
+            }
+        )
+    )
+
 class ContactForm(forms.Form):
     name = forms.CharField(
         max_length=100,

@@ -127,6 +127,7 @@
                         <th scope="col">Stock</th>
                         <th scope="col">Price</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Last Updated</th>
                         <th scope="col" class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -164,6 +165,7 @@
                                 <span class="stock-badge stock-good"> In Stock</span>
                             {% endif %}
                         </td>
+                        <td>{{ product.updated_at }}</td>
 
                         <td>
                             <div class="product-actions">
@@ -174,6 +176,14 @@
                                 >
                                     <i class="bi bi-pencil"></i>
                                     Edit
+                                </a>
+                                <a
+                                    href="{% url 'inventory:product_stock' pk=product.pk %}"
+                                    class="btn product-action-edit"
+                                    aria-label="Edit {{ product.name }}"
+                                >
+                                    <i class="bi bi-box-seam"></i>
+                                    Stock
                                 </a>
 
                                 <a
