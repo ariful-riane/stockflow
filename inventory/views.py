@@ -127,14 +127,13 @@ def product_list(request):
 @login_required
 def product_create(request):
     if request.method == "POST":
-        form = ProductForm(request.POST)
+        product = Product(created_by=request.user)
+        form = ProductForm(request.POST, instance=product)
         if form.is_valid():
-            product = form.save(commit=False)
-            product.created_by = request.user
-            product.save()
+            form.save()
             return redirect("inventory:product_list")
     else:
-        form = ProductForm()
+        form = ProductForm(instance=Product(created_by=request.user))
     return render(request, 
                     "inventory/product_form.html",
                     {"form": form}
