@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import ProtectedError, Q, F
 from .services import apply_stock_movement
 from .models import StockMovement
+from django.db import IntegrityError, transaction
 
 from django.conf import settings
 from django.contrib import messages
@@ -130,8 +131,12 @@ def product_create(request):
         product = Product(created_by=request.user)
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
-            form.save()
-            return redirect("inventory:product_list")
+            try:
+                with transaction.atomic():
+                    form.save()
+                    return redirect("inventory:product_list")
+            except IntegrityError:
+                form.add_error("sku", "Product with this SKU already exists.")
     else:
         form = ProductForm(instance=Product(created_by=request.user))
     return render(request, 
@@ -145,8 +150,12 @@ def product_edit(request, pk):
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
-            form.save()
-            return redirect("inventory:product_list")
+            try:
+                with transaction.atomic():
+                    form.save()
+                    return redirect("inventory:product_list")
+            except IntegrityError:
+                form.add_error("sku", "Product with this SKU already exists.")
     else:
         form = ProductForm(instance=product)
     return render(request, 
