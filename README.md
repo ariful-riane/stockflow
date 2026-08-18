@@ -2,6 +2,8 @@
 
 A simple stock management web app built with Django. Lets you track products, categories, and stock movements, with warnings for low or out-of-stock items.
 
+**Live demo:** https://stockflow-gamma-lovat.vercel.app/
+
 **Repo:** https://github.com/ariful-riane/stockflow
 
 ---
@@ -21,7 +23,9 @@ A simple stock management web app built with Django. Lets you track products, ca
 
 - Python / Django
 - SQLite (Django's default, bundled — no separate install needed)
+- PostgreSQL (via Neon) in production
 - HTML, CSS, JS
+- Deployed on Vercel
 
 ## Project structure
 
@@ -70,7 +74,7 @@ This project was built as a team of three, split by feature area:
 |---|---|---|
 | **Methul** | Inventory backend | Product, Category, and StockMovement models; stock-in/stock-out logic; preventing negative stock; dashboard totals and low-stock warnings; testing; migrations; Django admin |
 | **Joel** | Product pages & UI | Base layout and navigation; product list; add/edit/delete pages; CSS and JS, including light/dark theme; responsive design |
-| **Riane** | Accounts, dashboard & quality | Login and signup forms with validation; search and filtering; add stock page; protecting pages from logged-out users; testing, sample data, deployment, README, screenshots |
+| **Riane** | Accounts, dashboard & quality | Login and signup forms with validation; search and filtering; add stock page; protecting pages from logged-out users; testing, sample data, deployment, Neon POSTRESQL, Vercel, README, screenshots |
 
 ## Status
 
