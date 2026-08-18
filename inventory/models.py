@@ -30,7 +30,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        constrains = [
+        constraints = [
             models.UniqueConstraint(
                 fields=["created_by", "sku"],
                 name="unique_sku_per_user",
