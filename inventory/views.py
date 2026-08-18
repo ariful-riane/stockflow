@@ -68,7 +68,7 @@ def signup(request):
 
 @login_required
 def product_list(request):
-    products = Product.objects.select_related("category").all().order_by("name")
+    products = Product.objects.filter(created_by=request.user).select_related("category").all().order_by("name")
     categories = Category.objects.all().order_by("name")
 
     search = request.GET.get("search", "").strip()
@@ -129,7 +129,9 @@ def product_create(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)
+            product.created_by = request.user
+            product.save()
             return redirect("inventory:product_list")
     else:
         form = ProductForm()
@@ -140,7 +142,7 @@ def product_create(request):
 
 @login_required
 def product_edit(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
@@ -159,7 +161,7 @@ def product_edit(request, pk):
 
 @login_required
 def product_stock(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
 
     if request.method == "POST":
         form = StockForm(request.POST)
@@ -189,7 +191,7 @@ def product_stock(request, pk):
 
 @login_required
 def product_delete(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
 
     if product.quantity > 0:
         return render(request, "inventory/product_confirm_delete.html",

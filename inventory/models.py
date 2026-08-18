@@ -8,7 +8,13 @@ class Category(models.Model):
         return self.name
 class Product(models.Model):
     name = models.CharField(max_length=150)
-    sku = models.CharField(max_length=50, unique=True)
+    sku = models.CharField(max_length=50)
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="products",
+    )
 
     category = models.ForeignKey(
         Category,
@@ -22,6 +28,14 @@ class Product(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constrains = [
+            models.UniqueConstraint(
+                fields=["created_by", "sku"],
+                name="unique_sku_per_user",
+            )
+        ]
 
     def __str__(self):
         return f"{self.name} ({self.sku})"
