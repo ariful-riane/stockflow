@@ -38,6 +38,14 @@ class ProductForm(forms.ModelForm):
                 attrs={'class': 'form-control product-form-control'}),
         }
 
+        def clean_sku(self):
+            sku = self.cleaned_data["sku"]
+            user = self.instance.created_by
+
+            if user and Product.objects.filter(created_by=user, sku=sku).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("Product with this SKU already exists.")
+            return sku
+
 class StockForm(forms.Form):
     ACTION_CHOICES =[
         ("increase", "Increase Stock"),
