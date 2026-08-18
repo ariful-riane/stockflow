@@ -15,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
         "name",
         "sku",
         "category",
-        "created_by"
+        "created_by",
         "quantity",
         "price",
         "minimum_stock",
